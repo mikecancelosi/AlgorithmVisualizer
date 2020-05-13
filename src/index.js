@@ -2,6 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import Slider from '@material-ui/core/Slider';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 
 function DrawBox(props){
   return(
@@ -30,6 +34,16 @@ class Row extends React.Component{
 
 class Visualizer extends React.Component { 
 
+ 
+  render(){
+    return(
+        <SortingInput/>
+        
+    );
+  };
+}
+
+class SortingInput extends React.Component{
   constructor(props){
     super(props);
     this.state={
@@ -37,18 +51,36 @@ class Visualizer extends React.Component {
     };
   }
 
-  handleChange = (event, value) => this.setState({ value });  
+  handleChange = (event, value) => this.setState({ value });
   handleDragStop = () => this.props.update(this.state.nCount);
 
   render(){
     return(
-        <NSlider value= {this.state.nCount} onChange = {this.handleChange} onDragStop={this.handleDragStop}/>
+      <div className ="center">
+        <div class = "sortInput">
+          <NSlider value= {this.state.nCount} onChange = {this.handleChange} onDragStop={this.handleDragStop}/>
+          <SortingAlgorithmDropdown/>
+        </div>
+      </div>
     );
-  };
+  }
 }
 
-class NSlider extends React.Component {
-  render() { 
+function SortingAlgorithmDropdown(){
+  return (
+    <FormControl class= "dropdown">
+        <Select labelId="Algorithm" id="algorithm-select" defaultValue="Bubble">
+          <MenuItem value={"Bubble"}>Bubble Sort</MenuItem>
+          <MenuItem value={"Insertion"}>Insertion Sort</MenuItem>
+          <MenuItem value={"Merge"}>Merge Sort</MenuItem>          
+          <MenuItem value={"Quick"}>Quick Sort</MenuItem>
+          <MenuItem value={"Selection"}>Selection Sort</MenuItem>
+        </Select>
+      </FormControl>
+  )
+}
+
+function NSlider(){  
     return(
       <div class = "nSlider" >   
       <Slider 
@@ -59,8 +91,7 @@ class NSlider extends React.Component {
         step ={1}
         />
       </div>
-      );
-  };
+      )
 }
 
 class Navigation extends React.Component{
