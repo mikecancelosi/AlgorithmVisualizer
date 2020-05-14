@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import Slider from '@material-ui/core/Slider';
-import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import Typography from '@material-ui/core/Typography';
 
 function DrawBox(props){
   return(
@@ -33,12 +33,21 @@ class Row extends React.Component{
 
 
 class Visualizer extends React.Component { 
+  constructor(props){
+    super(props);
+    this.state = {
+      nCount: 3,
+      sortMethod: "Bubble"
+    }
+  }
 
  
   render(){
     return(
+      <div id = "Visualizer">
         <SortingInput/>
-        
+        <SortingWindow/>
+      </div>
     );
   };
 }
@@ -50,18 +59,27 @@ class SortingInput extends React.Component{
       nCount: 3,
     };
   }
-
-  handleChange = (event, value) => this.setState({ value });
-  handleDragStop = () => this.props.update(this.state.nCount);
+  handleDragStop = (event, value) => {this.setState({nCount: value})};
 
   render(){
     return(
       <div className ="center">
         <div class = "sortInput">
-          <NSlider value= {this.state.nCount} onChange = {this.handleChange} onDragStop={this.handleDragStop}/>
+          <div class = "nSlider" >   
+            <Typography id="range-slider" >Items to sort </Typography>
+            <Slider 
+              defaultValue = {15}
+              min = {3}
+              max = {1000}
+              valueLabelDisplay = "auto"
+              step ={1}
+              onChangeCommitted={this.handleDragStop}
+              />
+          </div>
           <SortingAlgorithmDropdown/>
         </div>
       </div>
+
     );
   }
 }
@@ -80,18 +98,10 @@ function SortingAlgorithmDropdown(){
   )
 }
 
-function NSlider(){  
-    return(
-      <div class = "nSlider" >   
-      <Slider 
-        defaultValue = {15}
-        min = {3}
-        max = {1000}
-        valueLabelDisplay = "auto"
-        step ={1}
-        />
-      </div>
-      )
+function SortingWindow(){
+  return(
+    <div></div>
+  )
 }
 
 class Navigation extends React.Component{
