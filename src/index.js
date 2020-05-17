@@ -6,7 +6,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Typography from '@material-ui/core/Typography';
-import Sorter from './sorting.js';
 
 
 function DrawBox(props){
@@ -16,6 +15,65 @@ function DrawBox(props){
     </button>
     );  
 } 
+
+//#region "Sorting"
+function swap(arr, first_Index, second_Index){
+  var temp = arr[first_Index];
+  arr[first_Index] = arr[second_Index];
+  arr[second_Index] = temp;
+}
+
+function BubbleSortStep(arr) {
+  var swapped = false;
+  var newArray = arr;
+  for (var i = 1; i < arr.length - 1; i++) {
+      if (arr[i] < newArray[i - 1]) {
+          swapped = true;
+          var temp = newArray[i];
+          newArray[i] = newArray[i - 1];
+          newArray[i - 1] = temp;
+      }
+  }
+  if (swapped) {
+      return newArray;
+  }
+  else {
+      return null;
+  }
+}
+
+
+function GenerateDataSet(count) {
+  var increment = 1 / count;
+  var set = [];
+  for (var i = 1; i <= count; i++) {
+      set.push(i * increment);
+  }
+  this.shuffle(set);
+
+  return set;
+}
+
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
+//#endregion
+
 
 class Visualizer extends React.Component { 
   constructor(props){
@@ -41,7 +99,7 @@ class Visualizer extends React.Component {
     }  
 
     this.setState({
-      arr: Sorter.GenerateDataSet(this.state.nCount)
+      arr: GenerateDataSet(this.state.nCount)
     });    
 
   }
@@ -93,22 +151,29 @@ class SortingWindow extends React.Component {
     super(props);
     this.state = {      
     arr : [],
-    steps : []
+    steps : [],
     }
-    this.Sort();
   }  
 
   Sort(){
-    for (let i = 0; i < this.state.steps.length; i++) {
-      const element = this.state.steps[i];
-      
-      
+    var sorting = true;
+    while(sorting){
+      var newArray = BubbleSort(this.state.arr);
+      if(newArray)
+      {
+        this.setState({ 
+          steps: this.state.steps.push(newArray),
+          });
+        
+      } else {
+        sorting = false;
+      }    
     }
   }
 
   RenderSteps = () => {
     let rows = [];
-    for (let i =0 ; i< this.state.steps.length;i++){
+    for (let i = 0 ; i< this.state.steps.length;i++){
       const element = this.state.steps[i];
       rows.push(<Row blockValues = {element}/>);
     }
