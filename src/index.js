@@ -6,6 +6,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Typography from '@material-ui/core/Typography';
+import Sorter from './sorting.js';
+
 
 function DrawBox(props){
   return(
@@ -13,55 +15,48 @@ function DrawBox(props){
       {props.value}
     </button>
     );  
-}
-
-
-class Row extends React.Component{
-  constructor(props){
-    super(props);
-    this.state= {
-      blocks: props.blocks
-    };
-  }
-
-  render(){
-    return(
-    <button></button>
-    );
-  }
-}
-
+} 
 
 class Visualizer extends React.Component { 
   constructor(props){
     super(props);
     this.state = {
       nCount: 3,
-      sortMethod: "Bubble"
+      sortMethod: "Bubble",
+      arr: []
     }
   }
 
+  HandleInputChange = (nCount, sortMethod) => {
+    if(nCount){
+      this.setState({
+        nCount: nCount,
+      });
+    }
+    if(sortMethod){      
+      const sortValue = sortMethod.target.value;   
+      this.setState({ 
+          sortMethod: sortValue
+      });
+    }  
+
+    this.setState({
+      arr: Sorter.GenerateDataSet(this.state.nCount)
+    });    
+
+  }
  
   render(){
     return(
       <div id = "Visualizer">
-        <SortingInput/>
-        <SortingWindow/>
+        <SortingInput onChange = {this.HandleInputChange}/>
+        <SortingWindow arr = {this.state.arr} />
       </div>
     );
   };
 }
 
-class SortingInput extends React.Component{
-  constructor(props){
-    super(props);
-    this.state={
-      nCount: 3,
-    };
-  }
-  handleDragStop = (event, value) => {this.setState({nCount: value})};
-
-  render(){
+function SortingInput(props){
     return(
       <div className ="center">
         <div class = "sortInput">
@@ -73,36 +68,88 @@ class SortingInput extends React.Component{
               max = {1000}
               valueLabelDisplay = "auto"
               step ={1}
-              onChangeCommitted={this.handleDragStop}
+              onChangeCommitted = { (e,value) => props.onChange(value,null)}
               />
           </div>
-          <SortingAlgorithmDropdown/>
+          <div id = "SortAlgorithm">
+            <FormControl class= "dropdown">
+              <Select labelId="Algorithm" id="algorithm-select" defaultValue="Bubble" onChange={(e,value) => props.onChange(null,e)}>
+                <MenuItem value={"Bubble"}>Bubble Sort</MenuItem>
+                <MenuItem value={"Insertion"}>Insertion Sort</MenuItem>
+                <MenuItem value={"Merge"}>Merge Sort</MenuItem>          
+                <MenuItem value={"Quick"}>Quick Sort</MenuItem>
+                <MenuItem value={"Selection"}>Selection Sort</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
         </div>
       </div>
+    );  
+}
 
+
+class SortingWindow extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {      
+    arr : [],
+    steps : []
+    }
+    this.Sort();
+  }  
+
+  Sort(){
+    for (let i = 0; i < this.state.steps.length; i++) {
+      const element = this.state.steps[i];
+      
+      
+    }
+  }
+
+  RenderSteps = () => {
+    let rows = [];
+    for (let i =0 ; i< this.state.steps.length;i++){
+      const element = this.state.steps[i];
+      rows.push(<Row blockValues = {element}/>);
+    }
+    return rows;
+  }
+
+  render(){
+    return(
+      <div className = "SortingWindow">
+        {this.RenderSteps()}  
+      </div>
+    )
+  }
+}
+
+class Row extends React.Component{
+  constructor(props){
+    super(props);
+    this.state= {
+      blockValues: [],
+      blocks: []
+    };
+  }
+
+  createBlocks = () => {
+    for (let i = 0;i < this.state.blockValues.length;i++)
+    {
+
+    }
+
+  }
+
+  render(){
+    return(
+      <div className="Row">
+     
+      </div>
     );
   }
 }
 
-function SortingAlgorithmDropdown(){
-  return (
-    <FormControl class= "dropdown">
-        <Select labelId="Algorithm" id="algorithm-select" defaultValue="Bubble">
-          <MenuItem value={"Bubble"}>Bubble Sort</MenuItem>
-          <MenuItem value={"Insertion"}>Insertion Sort</MenuItem>
-          <MenuItem value={"Merge"}>Merge Sort</MenuItem>          
-          <MenuItem value={"Quick"}>Quick Sort</MenuItem>
-          <MenuItem value={"Selection"}>Selection Sort</MenuItem>
-        </Select>
-      </FormControl>
-  )
-}
-
-function SortingWindow(){
-  return(
-    <div></div>
-  )
-}
 
 class Navigation extends React.Component{
   render(){
