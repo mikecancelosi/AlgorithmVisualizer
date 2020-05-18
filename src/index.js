@@ -21,7 +21,7 @@ function DrawBox(value) {
 function BubbleSortStep(arr) {
   let swapped = false;
   let newArray = arr;
-  for (let i = 1; i < arr.length; i++) {
+  for (let i = 1; i <= arr.length; i++) {
     if (arr[i] < newArray[i - 1]) {
       swapped = true;
       let temp = newArray[i];
@@ -50,22 +50,14 @@ function GenerateDataSet(count) {
 }
 
 function shuffle(array) {
-  let currentIndex = array.length, temporaryValue, randomIndex;
+  let newArray = array;
 
-  // While there remain elements to shuffle...
-  while (0 !== currentIndex) {
-
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-
-    // And swap it with the current element.
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
+  for (let i = newArray.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1)); // random index from 0 to i
+    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
   }
 
-  return array;
+  return newArray;
 }
 //#endregion
 
@@ -146,17 +138,15 @@ class SortingWindow extends React.Component {
 
     if (this.props.arr) {
       let sorting = true;
-
+      steps.push(this.props.arr.slice());
       while (sorting) {
         const newArray = BubbleSortStep(this.props.arr);
         if (newArray) {
-          alert("new is " + newArray[2]);
-          steps.push(newArray);
+          steps.push(newArray.slice());
         } else {
           sorting = false;
         }
       }
-      alert("Steps = " + steps.length);
 
     } else {
       alert("Array to be sorted is null.");
@@ -166,7 +156,7 @@ class SortingWindow extends React.Component {
 
   }
 
-  RenderSteps = (steps) => {
+  RenderSteps(steps) {
     if (steps) {
       let rows = [];
       for (let i = 0; i < steps.length; i++) {
