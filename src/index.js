@@ -8,29 +8,23 @@ import Select from '@material-ui/core/Select';
 import Typography from '@material-ui/core/Typography';
 
 
-function DrawBox(props) {
+function DrawBox(value) {
   return (
-    <button className="square" onClick={props.onClick}>
-      {alert("Button val = " + props.value)}
-      {props.value}
+    <button className="square">
+      {value}
     </button>
   );
 }
 
 //#region "Sorting"
-function swap(arr, first_Index, second_Index) {
-  var temp = arr[first_Index];
-  arr[first_Index] = arr[second_Index];
-  arr[second_Index] = temp;
-}
 
 function BubbleSortStep(arr) {
-  var swapped = false;
-  var newArray = arr;
-  for (var i = 1; i < arr.length - 1; i++) {
+  let swapped = false;
+  let newArray = arr;
+  for (let i = 1; i < arr.length; i++) {
     if (arr[i] < newArray[i - 1]) {
       swapped = true;
-      var temp = newArray[i];
+      let temp = newArray[i];
       newArray[i] = newArray[i - 1];
       newArray[i - 1] = temp;
     }
@@ -45,9 +39,9 @@ function BubbleSortStep(arr) {
 
 
 function GenerateDataSet(count) {
-  var increment = (1 / count).toFixed(6);
-  var set = [];
-  for (var i = 1; i <= count; i++) {
+  let increment = (1 / count).toFixed(6);
+  let set = [];
+  for (let i = 1; i <= count; i++) {
     set.push(i * increment);
   }
   set = shuffle(set);
@@ -56,7 +50,7 @@ function GenerateDataSet(count) {
 }
 
 function shuffle(array) {
-  var currentIndex = array.length, temporaryValue, randomIndex;
+  let currentIndex = array.length, temporaryValue, randomIndex;
 
   // While there remain elements to shuffle...
   while (0 !== currentIndex) {
@@ -154,14 +148,15 @@ class SortingWindow extends React.Component {
       let sorting = true;
 
       while (sorting) {
-        var newArray = BubbleSortStep(this.props.arr);
+        const newArray = BubbleSortStep(this.props.arr);
         if (newArray) {
+          alert("new is " + newArray[2]);
           steps.push(newArray);
         } else {
           sorting = false;
         }
       }
-      alert(steps.length);
+      alert("Steps = " + steps.length);
 
     } else {
       alert("Array to be sorted is null.");
