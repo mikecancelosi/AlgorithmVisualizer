@@ -104,3 +104,8 @@ body {
 .dropdown{
   width: 20%;
 }
+
+.Row{
+  align-content: space-between;
+  display: flex;
+}

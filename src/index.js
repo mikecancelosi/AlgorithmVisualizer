@@ -6,15 +6,15 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Typography from '@material-ui/core/Typography';
+import { palette } from '@material-ui/system';
+import Box from '@material-ui/core/Box';
 
-
-function DrawBox(value) {
+function DrawBox(boxWidth, value) {
   return (
-    <button className="square">
-      {value}
-    </button>
+    <Box width={boxWidth} height={boxWidth} style={{ backgroundColor: 'rgb(' + value + ',' + value + ',' + value + ')' }} />
   );
 }
+
 
 //#region "Sorting"
 
@@ -83,7 +83,6 @@ class Visualizer extends React.Component {
         sortMethod: sortValue,
       });
     }
-
   }
 
   render() {
@@ -178,9 +177,11 @@ class SortingWindow extends React.Component {
 class Row extends React.Component {
 
   createBlocks = () => {
+    let width = window.innerWidth / this.props.blockValues.length;
     let blockArray = [];
     for (let i = 0; i < this.props.blockValues.length; i++) {
-      const blockInstance = DrawBox(this.props.blockValues[i]);
+      let convValue = this.props.blockValues[i] * 255;
+      const blockInstance = DrawBox(width, convValue);
       blockArray.push(blockInstance);
     }
     return blockArray;
