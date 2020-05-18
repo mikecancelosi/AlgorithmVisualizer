@@ -68,7 +68,6 @@ class Visualizer extends React.Component {
     this.state = {
       nCount: 15,
       sortMethod: "Bubble",
-      arr: []
     }
   }
 
@@ -76,14 +75,12 @@ class Visualizer extends React.Component {
     if (nCount) {
       this.setState({
         nCount: nCount,
-        arr: GenerateDataSet(this.state.nCount)
       });
     }
     if (sortMethod) {
       const sortValue = sortMethod.target.value;
       this.setState({
         sortMethod: sortValue,
-        arr: GenerateDataSet(this.state.nCount)
       });
     }
 
@@ -93,7 +90,7 @@ class Visualizer extends React.Component {
     return (
       <div id="Visualizer">
         <SortingInput onChange={this.HandleInputChange} />
-        <SortingWindow arr={this.state.arr} />
+        <SortingWindow arr={GenerateDataSet(this.state.nCount)} />
       </div>
     );
   };
