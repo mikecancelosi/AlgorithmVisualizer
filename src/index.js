@@ -11,7 +11,7 @@ import Box from '@material-ui/core/Box';
 
 function DrawBox(boxWidth, value) {
   return (
-    <Box width={boxWidth} height={boxWidth} style={{ backgroundColor: 'rgb(' + value + ',' + value + ',' + value + ')' }} />
+    <Box width={boxWidth} height={boxWidth} style={{ float: 'left', backgroundColor: 'rgb(' + value + ',' + value + ',' + value + ')' }} />
   );
 }
 
@@ -87,7 +87,7 @@ class Visualizer extends React.Component {
 
   render() {
     return (
-      <div id="Visualizer">
+      <div id="Visualizer" className="Visualizer">
         <SortingInput onChange={this.HandleInputChange} />
         <SortingWindow arr={GenerateDataSet(this.state.nCount)} />
       </div>
@@ -97,7 +97,7 @@ class Visualizer extends React.Component {
 
 function SortingInput(props) {
   return (
-    <div className="center">
+    <div className="center" id="SortingInput">
       <div class="sortInput">
         <div class="nSlider" >
           <Typography id="range-slider" >Items to sort </Typography>
@@ -128,60 +128,80 @@ function SortingInput(props) {
 
 
 class SortingWindow extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      mounted: false
+    }
+  }
 
   RenderSort() {
-    let steps = [];
+    if (!this.state.mounted) {
+      document.getElementById("root").style.height = "100%"
+    } else {
+      let steps = [];
 
-    if (this.props.arr) {
-      let sorting = true;
-      steps.push(this.props.arr.slice());
-      while (sorting) {
-        const newArray = BubbleSortStep(this.props.arr);
-        if (newArray) {
-          steps.push(newArray.slice());
-        } else {
-          sorting = false;
+      if (this.props.arr) {
+        let sorting = true;
+        steps.push(this.props.arr.slice());
+        while (sorting) {
+          const newArray = BubbleSortStep(this.props.arr);
+          if (newArray) {
+            steps.push(newArray.slice());
+          } else {
+            sorting = false;
+          }
         }
+
+      } else {
+        alert("Array to be sorted is null.");
       }
 
-    } else {
-      alert("Array to be sorted is null.");
+      return this.RenderSteps(steps);
     }
-
-    return this.RenderSteps(steps);
 
   }
 
+  componentDidMount() {
+    this.setState({
+      mounted: true
+    })
+  }
+
   RenderSteps(steps) {
-    if (steps) {
-      let rows = [];
+    if (steps && document.getElementById('SortWindow')) {
+      let cols = [];
+      let clHeight = window.innerHeight - document.getElementById('navigation').clientHeight - document.getElementById('SortingInput').clientHeight - 30;
+      let clWidth = document.getElementById('Visualizer').clientWidth;
+      let size = Math.min((clWidth / steps.length), (clHeight / this.props.arr.length));
       for (let i = 0; i < steps.length; i++) {
         const element = steps[i];
-        rows.push(<Row blockValues={element} />);
+        cols.push(<Column size={size} blockValues={element} />);
       }
-      return rows;
+
+      return cols;
     } else {
       return null;
     }
+
   }
 
   render() {
     return (
-      <div className="SortingWindow">
+      <div id="SortWindow" className="SortingWindow">
         {this.RenderSort()}
       </div>
     )
   }
 }
 
-class Row extends React.Component {
+class Column extends React.Component {
 
   createBlocks = () => {
-    let width = window.innerWidth / this.props.blockValues.length;
     let blockArray = [];
     for (let i = 0; i < this.props.blockValues.length; i++) {
       let convValue = this.props.blockValues[i] * 255;
-      const blockInstance = DrawBox(width, convValue);
+      const blockInstance = DrawBox(this.props.size, convValue);
       blockArray.push(blockInstance);
     }
     return blockArray;
@@ -189,7 +209,7 @@ class Row extends React.Component {
 
   render() {
     return (
-      <div className="Row">
+      <div className="Column">
         {this.createBlocks()}
       </div>
     );
@@ -200,14 +220,12 @@ class Row extends React.Component {
 class Navigation extends React.Component {
   render() {
     return (
-      <div className="container center">
-        <div className="menu">
-          <div class="menu-left">
-            <ul class="menu-list">
-              <li class="menu-list-item"><a class="menu-link menu-link--active" href="#">Sorting</a></li>
-              <li class="menu-list-item"><a class="menu-link" href="#">Pathfinding</a></li>
-            </ul>
-          </div>
+      <div className="menu" id="navigation">
+        <div class="menu-left">
+          <ul class="menu-list">
+            <li class="menu-list-item"><a class="menu-link menu-link--active" href="#">Sorting</a></li>
+            <li class="menu-list-item"><a class="menu-link" href="#">Pathfinding</a></li>
+          </ul>
         </div>
       </div>
     );
@@ -216,10 +234,14 @@ class Navigation extends React.Component {
 
 class App extends React.Component {
 
+  GetVisualizerSize() {
+
+  }
+
   render() {
     return (
       <div className="container">
-        <Navigation />
+        <Navigation id="Nav" />
         <Visualizer />
       </div>
     );
