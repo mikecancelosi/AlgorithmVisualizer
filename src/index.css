@@ -107,10 +107,9 @@ body {
 }
 
 .SortingWindow{  
-  display:flex;
+  display:grid;
 }
 
-.Column{
-  display: grid;
-  float: left;
+.Step{
+  display: flex;
 }

@@ -11,7 +11,7 @@ import Box from '@material-ui/core/Box';
 
 function DrawBox(boxWidth, value) {
   return (
-    <Box width={boxWidth} height={boxWidth} style={{ float: "left", backgroundColor: 'rgb(' + value + ',' + value + ',' + value + ')' }} />
+    <Box width={boxWidth} height={boxWidth} style={{ backgroundColor: 'rgb(' + value + ',' + value + ',' + value + ')' }} />
   );
 }
 
@@ -46,22 +46,24 @@ function BubbleSortStep(arr) {
 
 
 function InsertionSortStep(arr) {
-  let swapped = false;
-  let newArray = arr;
-  for (let i = 1; i <= arr.length; i++) {
-    if (arr[i] < newArray[i - 1]) {
-      swapped = true;
-      let temp = newArray[i];
-      newArray[i] = newArray[i - 1];
-      newArray[i - 1] = temp;
+  let steps = [];
+  steps.push(arr.slice());
+
+  for (let i = 1; i < arr.length; i++) {
+    let newArray = steps[steps.length - 1].slice();
+    let currentvalue = newArray[i]
+    let position = i
+
+    while (position > 0 && newArray[position - 1] > currentvalue) {
+      newArray[position] = newArray[position - 1]
+      position = position - 1
     }
+
+    newArray[position] = currentvalue
+    steps.push(newArray.slice());
   }
-  if (swapped) {
-    return newArray;
-  }
-  else {
-    return null;
-  }
+
+  return steps;
 }
 
 
@@ -202,10 +204,10 @@ class SortingWindow extends React.Component {
       let cols = [];
       let clHeight = window.innerHeight - document.getElementById('navigation').clientHeight - document.getElementById('SortingInput').clientHeight - 30;
       let clWidth = document.getElementById('Visualizer').clientWidth;
-      let size = Math.min((clWidth / steps.length), (clHeight / this.props.arr.length));
+      let size = Math.min((clHeight / steps.length), (clWidth / this.props.arr.length));
       for (let i = 0; i < steps.length; i++) {
         const element = steps[i];
-        cols.push(<Column size={size} blockValues={element} />);
+        cols.push(<Step size={size} blockValues={element} />);
       }
 
       return cols;
@@ -224,7 +226,7 @@ class SortingWindow extends React.Component {
   }
 }
 
-class Column extends React.Component {
+class Step extends React.Component {
 
   createBlocks = () => {
     let blockArray = [];
@@ -238,7 +240,7 @@ class Column extends React.Component {
 
   render() {
     return (
-      <div className="Column">
+      <div className="Step">
         {this.createBlocks()}
       </div>
     );
