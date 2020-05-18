@@ -11,7 +11,7 @@ import Box from '@material-ui/core/Box';
 
 function DrawBox(boxWidth, value) {
   return (
-    <Box width={boxWidth} height={boxWidth} style={{ float: 'left', backgroundColor: 'rgb(' + value + ',' + value + ',' + value + ')' }} />
+    <Box width={boxWidth} height={boxWidth} style={{ float: "left", backgroundColor: 'rgb(' + value + ',' + value + ',' + value + ')' }} />
   );
 }
 
@@ -19,6 +19,33 @@ function DrawBox(boxWidth, value) {
 //#region "Sorting"
 
 function BubbleSortStep(arr) {
+  let steps = [];
+  steps.push(arr.slice());
+  let sorting = true;
+  while (sorting) {
+    let swapped = false;
+    const arrCpy = steps[steps.length - 1];
+    let newArray = arrCpy.slice();
+    for (let i = 1; i <= newArray.length; i++) {
+      if (arrCpy[i] < newArray[i - 1]) {
+        swapped = true;
+        let temp = newArray[i];
+        newArray[i] = newArray[i - 1];
+        newArray[i - 1] = temp;
+      }
+    }
+    if (swapped) {
+      steps.push(newArray.slice());
+    } else {
+      sorting = false;
+    }
+  }
+
+  return steps;
+}
+
+
+function InsertionSortStep(arr) {
   let swapped = false;
   let newArray = arr;
   for (let i = 1; i <= arr.length; i++) {
@@ -36,6 +63,7 @@ function BubbleSortStep(arr) {
     return null;
   }
 }
+
 
 
 function GenerateDataSet(count) {
@@ -89,7 +117,7 @@ class Visualizer extends React.Component {
     return (
       <div id="Visualizer" className="Visualizer">
         <SortingInput onChange={this.HandleInputChange} />
-        <SortingWindow arr={GenerateDataSet(this.state.nCount)} />
+        <SortingWindow arr={GenerateDataSet(this.state.nCount)} sort={this.state.sortMethod} />
       </div>
     );
   };
@@ -104,7 +132,7 @@ function SortingInput(props) {
           <Slider
             defaultValue={15}
             min={3}
-            max={1000}
+            max={100}
             valueLabelDisplay="auto"
             step={1}
             onChangeCommitted={(e, value) => props.onChange(value, null)}
@@ -142,18 +170,19 @@ class SortingWindow extends React.Component {
       let steps = [];
 
       if (this.props.arr) {
-        let sorting = true;
-        steps.push(this.props.arr.slice());
-        while (sorting) {
-          const newArray = BubbleSortStep(this.props.arr);
-          if (newArray) {
-            steps.push(newArray.slice());
-          } else {
-            sorting = false;
-          }
-        }
 
-      } else {
+        switch (this.props.sort) {
+          case "Bubble":
+            steps = BubbleSortStep(this.props.arr);
+            break;
+          case "Insertion":
+            steps = InsertionSortStep(this.props.arr);
+            break;
+          default:
+            return null;
+        }
+      }
+      else {
         alert("Array to be sorted is null.");
       }
 
@@ -188,7 +217,7 @@ class SortingWindow extends React.Component {
 
   render() {
     return (
-      <div id="SortWindow" className="SortingWindow">
+      <div id="SortWindow" className="SortingWindow center">
         {this.RenderSort()}
       </div>
     )
