@@ -11,16 +11,14 @@ import Box from '@material-ui/core/Box';
 
 function DrawBox(boxWidth, value) {
   return (
-    <Box width={boxWidth} height={boxWidth} style={{ backgroundColor: 'rgb(' + value + ',' + value + ',' + value + ')' }} />
+    <Box key={value} width={boxWidth} height={boxWidth} style={{ backgroundColor: 'rgb(' + value + ',' + value + ',' + value + ')' }} />
   );
 }
 
 
 //#region "Sorting"
 
-function BubbleSortStep(arr) {
-  let steps = [];
-  steps.push(arr.slice());
+function BubbleSortStep(arr, steps) {
   let sorting = true;
   while (sorting) {
     let swapped = false;
@@ -45,9 +43,96 @@ function BubbleSortStep(arr) {
 }
 
 
-function InsertionSortStep(arr) {
+function InsertionSortStep(arr, steps) {
+  for (let i = 1; i < arr.length; i++) {
+    let newArray = steps[steps.length - 1].slice();
+    let currentvalue = newArray[i]
+    let position = i
+
+    while (position > 0 && newArray[position - 1] > currentvalue) {
+      newArray[position] = newArray[position - 1]
+      position = position - 1
+    }
+
+    newArray[position] = currentvalue
+    steps.push(newArray.slice());
+  }
+
+  return steps;
+}
+
+function MergeSortStep(arr, len, steps, stepIndex) {
+  let stepindexInc = stepIndex + 1;
+  if (arr.length <= 1) {
+    if (steps.length > stepindexInc) {
+      steps[stepindexInc].push(arr[0]);
+    } else {
+      steps.push(arr.slice());
+    }
+    return arr;
+  }
+  else {
+    let arrayRef = arr.slice();
+
+    let mid = Math.floor(arrayRef.length / 2);
+    let leftArray = arrayRef.slice(0, mid);
+    let rightArray = arrayRef.slice(mid);
+
+    let left = MergeSortStep(leftArray, len, steps, stepindexInc);
+    let right = MergeSortStep(rightArray, len, steps, stepindexInc);
+    let mergeArray = merge(left, right);
+
+    if (steps.length > stepindexInc) {
+      for (let i = 0; i < mergeArray.length; i++) {
+        steps[stepindexInc].push(mergeArray[i]);
+      }
+    } else {
+      steps.push(mergeArray.slice());
+    }
+
+    return mergeArray;
+  }
+
+}
+
+function merge(arr1, arr2) {
+  let sorted = [];
+
+  while (arr1.length && arr2.length) {
+    if (arr1[0] < arr2[0]) {
+      sorted.push(arr1.shift());
+    } else {
+      sorted.push(arr2.shift());
+    }
+  };
+  let output = sorted.concat(arr1.slice().concat(arr2.slice()));
+
+  return output;
+}
+
+
+function QuickSortStep(arr) {
   let steps = [];
-  steps.push(arr.slice());
+
+  for (let i = 1; i < arr.length; i++) {
+    let newArray = steps[steps.length - 1].slice();
+    let currentvalue = newArray[i]
+    let position = i
+
+    while (position > 0 && newArray[position - 1] > currentvalue) {
+      newArray[position] = newArray[position - 1]
+      position = position - 1
+    }
+
+    newArray[position] = currentvalue
+    steps.push(newArray.slice());
+  }
+
+  return steps;
+}
+
+function SelectionSortStep(arr) {
+  let steps = [];
 
   for (let i = 1; i < arr.length; i++) {
     let newArray = steps[steps.length - 1].slice();
@@ -128,8 +213,8 @@ class Visualizer extends React.Component {
 function SortingInput(props) {
   return (
     <div className="center" id="SortingInput">
-      <div class="sortInput">
-        <div class="nSlider" >
+      <div className="sortInput">
+        <div className="nSlider" >
           <Typography id="range-slider" >Items to sort </Typography>
           <Slider
             defaultValue={15}
@@ -141,7 +226,7 @@ function SortingInput(props) {
           />
         </div>
         <div id="SortAlgorithm">
-          <FormControl class="dropdown">
+          <FormControl className="dropdown">
             <Select labelId="Algorithm" id="algorithm-select" defaultValue="Bubble" onChange={(e, value) => props.onChange(null, e)}>
               <MenuItem value={"Bubble"}>Bubble Sort</MenuItem>
               <MenuItem value={"Insertion"}>Insertion Sort</MenuItem>
@@ -172,16 +257,24 @@ class SortingWindow extends React.Component {
       let steps = [];
 
       if (this.props.arr) {
+        steps.push(this.props.arr.slice());
 
         switch (this.props.sort) {
           case "Bubble":
-            steps = BubbleSortStep(this.props.arr);
+            steps = BubbleSortStep(this.props.arr, steps);
             break;
           case "Insertion":
-            steps = InsertionSortStep(this.props.arr);
+            steps = InsertionSortStep(this.props.arr, steps);
+            break;
+          case "Merge":
+            MergeSortStep(this.props.arr, this.props.arr.length, steps, 0);
+            break;
+          case "Quick":
+            steps = QuickSortStep(this.props.arr);
             break;
           default:
-            return null;
+            steps = SelectionSortStep(this.props.arr);
+            break;
         }
       }
       else {
@@ -207,7 +300,7 @@ class SortingWindow extends React.Component {
       let size = Math.min((clHeight / steps.length), (clWidth / this.props.arr.length));
       for (let i = 0; i < steps.length; i++) {
         const element = steps[i];
-        cols.push(<Step size={size} blockValues={element} />);
+        cols.push(<Step key={i} size={size} blockValues={element} />);
       }
 
       return cols;
@@ -252,10 +345,10 @@ class Navigation extends React.Component {
   render() {
     return (
       <div className="menu" id="navigation">
-        <div class="menu-left">
-          <ul class="menu-list">
-            <li class="menu-list-item"><a class="menu-link menu-link--active" href="#">Sorting</a></li>
-            <li class="menu-list-item"><a class="menu-link" href="#">Pathfinding</a></li>
+        <div className="menu-left">
+          <ul className="menu-list">
+            <li className="menu-list-item"><a className="menu-link menu-link--active" href="#">Sorting</a></li>
+            <li className="menu-list-item"><a className="menu-link" href="#">Pathfinding</a></li>
           </ul>
         </div>
       </div>
