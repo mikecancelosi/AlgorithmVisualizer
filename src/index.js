@@ -61,14 +61,8 @@ function InsertionSortStep(arr, steps) {
   return steps;
 }
 
-function MergeSortStep(arr, len, steps, stepIndex) {
-  let stepindexInc = stepIndex + 1;
+function MergeSortStep(arr, len, steps) {
   if (arr.length <= 1) {
-    if (steps.length > stepindexInc) {
-      steps[stepindexInc].push(arr[0]);
-    } else {
-      steps.push(arr.slice());
-    }
     return arr;
   }
   else {
@@ -78,13 +72,15 @@ function MergeSortStep(arr, len, steps, stepIndex) {
     let leftArray = arrayRef.slice(0, mid);
     let rightArray = arrayRef.slice(mid);
 
-    let left = MergeSortStep(leftArray, len, steps, stepindexInc);
-    let right = MergeSortStep(rightArray, len, steps, stepindexInc);
+    let left = MergeSortStep(leftArray, len, steps);
+    let right = MergeSortStep(rightArray, len, steps);
     let mergeArray = merge(left, right);
 
-    if (steps.length > stepindexInc) {
+    let stepIndex = stepsAway(mergeArray);
+
+    if (steps.length > stepIndex) {
       for (let i = 0; i < mergeArray.length; i++) {
-        steps[stepindexInc].push(mergeArray[i]);
+        steps[stepIndex].push(mergeArray[i]);
       }
     } else {
       steps.push(mergeArray.slice());
@@ -92,6 +88,20 @@ function MergeSortStep(arr, len, steps, stepIndex) {
 
     return mergeArray;
   }
+
+}
+
+function stepsAway(arr) {
+  const length = arr.length;
+  let stepIndex = 0;
+  let exponent = 0;
+  while (stepIndex == 0) {
+    exponent = exponent + 1;
+    if (Math.pow(2, exponent) >= length) {
+      stepIndex = exponent;
+    }
+  }
+  return stepIndex;
 
 }
 
@@ -267,7 +277,7 @@ class SortingWindow extends React.Component {
             steps = InsertionSortStep(this.props.arr, steps);
             break;
           case "Merge":
-            MergeSortStep(this.props.arr, this.props.arr.length, steps, 0);
+            MergeSortStep(this.props.arr, this.props.arr.length, steps);
             break;
           case "Quick":
             steps = QuickSortStep(this.props.arr);
