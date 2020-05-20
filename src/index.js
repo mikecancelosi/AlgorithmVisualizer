@@ -8,6 +8,7 @@ import Select from '@material-ui/core/Select';
 import Typography from '@material-ui/core/Typography';
 import { palette } from '@material-ui/system';
 import Box from '@material-ui/core/Box';
+import { indigo } from '@material-ui/core/colors';
 
 function DrawBox(boxWidth, value) {
   return (
@@ -72,23 +73,52 @@ function MergeSortStep(arr, len, steps) {
     let leftArray = arrayRef.slice(0, mid);
     let rightArray = arrayRef.slice(mid);
 
-    let left = MergeSortStep(leftArray, len, steps);
-    let right = MergeSortStep(rightArray, len, steps);
-    let mergeArray = merge(left, right);
+    let left = MergeSortStep(leftArray.slice(), len, steps).slice();
+    let right = MergeSortStep(rightArray.slice(), len, steps).slice();
 
-    let stepIndex = stepsAway(mergeArray);
-
-    if (steps.length > stepIndex) {
-      for (let i = 0; i < mergeArray.length; i++) {
-        steps[stepIndex].push(mergeArray[i]);
+    if (left.length == 1 && right.length != 1) {
+      if (steps.length > 1) {
+        steps[1].push(left[0]);
+      } else {
+        steps.push(left.slice());
       }
-    } else {
-      steps.push(mergeArray.slice());
+    }
+
+    let leftStep = stepsAway(left);
+    let rightStep = stepsAway(right);
+
+    if (leftStep < rightStep) {
+      if (steps.length > rightStep) {
+        for (let i = 0; i < left.length; i++) {
+          steps[rightStep].push(left[i]);
+        }
+      } else {
+        steps.push(left.slice());
+      }
+    }
+
+    let beforeCount = ArrayElementCount(steps);
+
+    let mergeArray = merge(left.slice(), right.slice(), steps);
+
+    let afterCount = ArrayElementCount(steps);
+    if (afterCount - beforeCount != (arrayRef.length)) {
+      console.log("counts arent adding up")
     }
 
     return mergeArray;
   }
 
+}
+
+function ArrayElementCount(arr) {
+  let count = 0;
+  for (let i = 0; i < arr.length; i++) {
+    for (let j = 0; j < arr[i].length; j++) {
+      count = count + 1;
+    }
+  }
+  return count;
 }
 
 function stepsAway(arr) {
@@ -105,9 +135,10 @@ function stepsAway(arr) {
 
 }
 
-function merge(arr1, arr2) {
+function merge(arr1, arr2, steps) {
   let sorted = [];
 
+  // Merge and sort the two arrays
   while (arr1.length && arr2.length) {
     if (arr1[0] < arr2[0]) {
       sorted.push(arr1.shift());
@@ -116,6 +147,17 @@ function merge(arr1, arr2) {
     }
   };
   let output = sorted.concat(arr1.slice().concat(arr2.slice()));
+
+  // Add to steps.
+  let stepIndex = stepsAway(output);
+
+  if (steps.length > stepIndex) {
+    for (let i = 0; i < output.length; i++) {
+      steps[stepIndex].push(output[i]);
+    }
+  } else {
+    steps.push(output.slice());
+  }
 
   return output;
 }
@@ -197,6 +239,7 @@ class Visualizer extends React.Component {
   }
 
   HandleInputChange = (nCount, sortMethod) => {
+    console.clear();
     if (nCount) {
       this.setState({
         nCount: nCount,
