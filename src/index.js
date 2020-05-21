@@ -62,6 +62,7 @@ function InsertionSortStep(arr, steps) {
   return steps;
 }
 
+//#region MergeSort
 function MergeSortStep(arr, len, steps) {
   if (arr.length <= 1) {
     return arr;
@@ -76,6 +77,7 @@ function MergeSortStep(arr, len, steps) {
     let left = MergeSortStep(leftArray.slice(), len, steps).slice();
     let right = MergeSortStep(rightArray.slice(), len, steps).slice();
 
+    // Account for singles
     if (left.length == 1 && right.length != 1) {
       if (steps.length > 1) {
         steps[1].push(left[0]);
@@ -84,9 +86,9 @@ function MergeSortStep(arr, len, steps) {
       }
     }
 
+    //Account for steps that need to be added in twice.
     let leftStep = stepsAway(left);
     let rightStep = stepsAway(right);
-
     if (leftStep < rightStep) {
       if (steps.length > rightStep) {
         for (let i = 0; i < left.length; i++) {
@@ -97,28 +99,12 @@ function MergeSortStep(arr, len, steps) {
       }
     }
 
-    let beforeCount = ArrayElementCount(steps);
-
     let mergeArray = merge(left.slice(), right.slice(), steps);
 
-    let afterCount = ArrayElementCount(steps);
-    if (afterCount - beforeCount != (arrayRef.length)) {
-      console.log("counts arent adding up")
-    }
 
     return mergeArray;
   }
 
-}
-
-function ArrayElementCount(arr) {
-  let count = 0;
-  for (let i = 0; i < arr.length; i++) {
-    for (let j = 0; j < arr[i].length; j++) {
-      count = count + 1;
-    }
-  }
-  return count;
 }
 
 function stepsAway(arr) {
@@ -161,46 +147,77 @@ function merge(arr1, arr2, steps) {
 
   return output;
 }
+//#endregion
 
 
-function QuickSortStep(arr) {
-  let steps = [];
-
-  for (let i = 1; i < arr.length; i++) {
-    let newArray = steps[steps.length - 1].slice();
-    let currentvalue = newArray[i]
-    let position = i
-
-    while (position > 0 && newArray[position - 1] > currentvalue) {
-      newArray[position] = newArray[position - 1]
-      position = position - 1
-    }
-
-    newArray[position] = currentvalue
-    steps.push(newArray.slice());
-  }
-
-  return steps;
+//#region QuickSort
+function swap(items, leftIndex, rightIndex) {
+  var temp = items[leftIndex];
+  items[leftIndex] = items[rightIndex];
+  items[rightIndex] = temp;
 }
 
-function SelectionSortStep(arr) {
-  let steps = [];
-
-  for (let i = 1; i < arr.length; i++) {
-    let newArray = steps[steps.length - 1].slice();
-    let currentvalue = newArray[i]
-    let position = i
-
-    while (position > 0 && newArray[position - 1] > currentvalue) {
-      newArray[position] = newArray[position - 1]
-      position = position - 1
+function partition(items, left, right) {
+  var pivot = items[Math.floor((right + left) / 2)], //middle element
+    i = left, //left pointer
+    j = right; //right pointer
+  while (i <= j) {
+    while (items[i] < pivot) {
+      i++;
     }
+    while (items[j] > pivot) {
+      j--;
+    }
+    if (i <= j) {
+      swap(items, i, j); //sawpping two elements
+      i++;
+      j--;
+    }
+  }
+  return i;
+}
 
-    newArray[position] = currentvalue
-    steps.push(newArray.slice());
+function QuickSortStep(items, left, right, steps) {
+  var index;
+  if (items.length > 1) {
+    index = partition(items, left, right); //index returned from partition
+    if (index - 1 > left) { //more elements on the left side of the pivot
+      QuickSortStep(items, left, index - 1, steps);
+    }
+    if (index < right) { //more elements on the right side of the pivot
+      QuickSortStep(items, index, right, steps);
+    }
+  }
+  if (JSON.stringify(steps[steps.length - 1]) != JSON.stringify(items)) {
+    steps.push(items.slice());
+  }
+  return items;
+}
+//#endregion
+
+
+
+
+function SelectionSortStep(arr, steps) {
+
+  let len = arr.length;
+  for (let i = 0; i < len; i++) {
+    let min = i;
+    for (let j = i + 1; j < len; j++) {
+      if (arr[min] > arr[j]) {
+        min = j;
+      }
+    }
+    if (min !== i) {
+      let tmp = arr[i];
+      arr[i] = arr[min];
+      arr[min] = tmp;
+
+      steps.push(arr.slice());
+    }
   }
 
-  return steps;
+  return arr;
 }
 
 
@@ -314,19 +331,19 @@ class SortingWindow extends React.Component {
 
         switch (this.props.sort) {
           case "Bubble":
-            steps = BubbleSortStep(this.props.arr, steps);
+            BubbleSortStep(this.props.arr, steps);
             break;
           case "Insertion":
-            steps = InsertionSortStep(this.props.arr, steps);
+            InsertionSortStep(this.props.arr, steps);
             break;
           case "Merge":
             MergeSortStep(this.props.arr, this.props.arr.length, steps);
             break;
           case "Quick":
-            steps = QuickSortStep(this.props.arr);
+            QuickSortStep(this.props.arr, 0, this.props.arr.length - 1, steps);
             break;
           default:
-            steps = SelectionSortStep(this.props.arr);
+            SelectionSortStep(this.props.arr, steps);
             break;
         }
       }
