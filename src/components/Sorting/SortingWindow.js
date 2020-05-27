@@ -12,29 +12,30 @@ export class SortingWindow extends Component {
     }
 
     RenderSort() {
+        const { arr, sort } = this.props;
         if (!this.state.mounted) {
             document.getElementById("root").style.height = "100%"
         } else {
             let steps = [];
 
-            if (this.props.arr) {
-                steps.push(this.props.arr.slice());
+            if (arr) {
+                steps.push(arr.slice());
 
-                switch (this.props.sort) {
+                switch (sort) {
                     case "Bubble":
-                        Sorting.BubbleSortStep(this.props.arr, steps);
+                        Sorting.BubbleSortStep(arr, steps);
                         break;
                     case "Insertion":
-                        Sorting.InsertionSortStep(this.props.arr, steps);
+                        Sorting.InsertionSortStep(arr, steps);
                         break;
                     case "Merge":
-                        Sorting.MergeSortStep(this.props.arr, this.props.arr.length, steps);
+                        Sorting.MergeSortStep(arr, arr.length, steps);
                         break;
                     case "Quick":
-                        Sorting.QuickSortStep(this.props.arr, 0, this.props.arr.length - 1, steps);
+                        Sorting.QuickSortStep(arr, 0, arr.length - 1, steps);
                         break;
                     default:
-                        Sorting.SelectionSortStep(this.props.arr, steps);
+                        Sorting.SelectionSortStep(arr, steps);
                         break;
                 }
             }
