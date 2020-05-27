@@ -6,7 +6,28 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Typography from '@material-ui/core/Typography';
 import SortingWindow from "./SortingWindow";
-import Sorting from "../../Sorting";
+
+function GenerateDataSet(count) {
+    let increment = (1 / count).toFixed(6);
+    let set = [];
+    for (let i = 1; i <= count; i++) {
+        set.push(i * increment);
+    }
+    set = shuffle(set);
+
+    return set;
+}
+
+function shuffle(array) {
+    let newArray = array;
+
+    for (let i = newArray.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1)); // random index from 0 to i
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+
+    return newArray;
+}
 
 function SortingInput(props) {
     return (
@@ -67,7 +88,7 @@ export default class SortingVisualizer extends React.Component {
         return (
             <div id="Visualizer" className="Visualizer">
                 <SortingInput onChange={this.HandleInputChange} />
-                <SortingWindow arr={Sorting.GenerateDataSet(this.state.nCount)} sort={this.state.sortMethod} />
+                <SortingWindow arr={GenerateDataSet(this.state.nCount)} sort={this.state.sortMethod} />
             </div>
         );
     };
