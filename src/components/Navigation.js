@@ -1,57 +1,57 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
-export default function Navigation() {
-    return (
-        <div style={menuStyle} id="navigation">
-            <div style={menuLeft}>
-                <ul style={menuList}>
-                    <li style={menuListItem}><a style={menuLink} href="#">Sorting</a></li>
-                    <li style={menuListItem}><a style={menuLink} href="#">Pathfinding</a></li>
-                </ul>
-            </div>
-        </div>
-    )
+export default class Navigation extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            sorting: true,
+        }
+    }
+
+
+    render() {
+        return (
+            <div id="navigation" style={navStyle}>
+                <div className="menu-list" >
+                    <Link className="menu-list-item" style={this.state.sorting ? linkStyleActive : linkStyle} onClick={() => this.setState({ sorting: true })} to="/"> Sorting </Link>
+                    <Link className="menu-list-item" style={this.state.sorting ? linkStyle : linkStyleActive} onClick={() => this.setState({ sorting: false })} to="/paths"> Pathfinding </Link>
+                </div >
+            </div >
+
+        )
+    }
 }
 
-const menuStyle = {
-    backgroundColor: '#fff',
+const navStyle = {
+    backgroundColor: '#eee',
     boxShadow: '0px 2px 24px 0px rgba(0,0,0,.15)',
     width: '100%',
     height: '80px',
-    display: 'flex',
-    justifyContent: 'space-between',
-    padding: '0 40px',
-    position: 'relative',
-}
-
-const menuLeft = {
+    padding: '20px',
     display: 'flex',
     alignItems: 'center',
-    height: '100%',
 }
 
-const menuList = {
-    listStyleType: 'none',
-    padding: '0',
-    height: '100%',
-    margin: '0px',
+const linkStyle = {
     marginRight: '40px',
-}
-const menuListItem = {
-    display: 'inline-block',
+    textDecoration: 'none',
+    fontWeight: 'bold',
+    color: '#222',
+    fontSize: '20px',
     height: '100%',
-    marginRight: '20px',
+    textAlign: 'center',
 }
 
-const menuLink = {
-    color: '#3a3e47',
-    display: 'inline - block',
-    height: '100%',
-    fontSize: '16px',
+const linkStyleActive = {
+    marginRight: '40px',
     textDecoration: 'none',
-    textTransform: 'uppercase',
-    display: 'flex',
-    alignItems: 'center',
-    fontWeight: '700',
-    padding: '0 3px',
+    fontWeight: 'bold',
+    color: '#222',
+    fontSize: '20px',
+    height: '100%',
+    textAlign: 'center',
+    borderTop: '4px solid #ffaa3b',
 }
+
+
