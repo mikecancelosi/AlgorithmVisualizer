@@ -1,0 +1,28 @@
+.pathingHeader{
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+}
+
+.headerItem{
+    display: inline-block;
+    align-self: center;
+    padding-right: 10px;
+}
+
+.pathingWindow{
+    width: 100%;
+    justify-content: center;
+}
+
+.grid{
+    width: 50%;  
+    display: grid;      
+}
+
+.row{
+    display: flex;
+}
+.element{
+    display: inline-block;
+}

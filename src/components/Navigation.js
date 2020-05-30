@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import '../css/Navigation.css';
 
 export default class Navigation extends React.Component {
     constructor(props) {
@@ -28,7 +29,7 @@ const navStyle = {
     boxShadow: '0px 2px 24px 0px rgba(0,0,0,.15)',
     width: '100%',
     height: '80px',
-    padding: '20px',
+    padding: '0px 20px',
     display: 'flex',
     alignItems: 'center',
 }

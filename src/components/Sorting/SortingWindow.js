@@ -62,7 +62,7 @@ function MergeSortStep(arr, len, steps) {
         let right = MergeSortStep(rightArray.slice(), len, steps).slice();
 
         // Account for singles
-        if (left.length == 1 && right.length != 1) {
+        if (left.length === 1 && right.length !== 1) {
             if (steps.length > 1) {
                 steps[1].push(left[0]);
             } else {
@@ -96,7 +96,7 @@ function stepsAway(arr) {
     const length = arr.length;
     let stepIndex = 0;
     let exponent = 0;
-    while (stepIndex == 0) {
+    while (stepIndex === 0) {
         exponent = exponent + 1;
         if (Math.pow(2, exponent) >= length) {
             stepIndex = exponent;
@@ -173,7 +173,7 @@ function QuickSortStep(items, left, right, steps) {
             QuickSortStep(items, index, right, steps);
         }
     }
-    if (JSON.stringify(steps[steps.length - 1]) != JSON.stringify(items)) {
+    if (JSON.stringify(steps[steps.length - 1]) !== JSON.stringify(items)) {
         steps.push(items.slice());
     }
     return items;

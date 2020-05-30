@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../index.css';
+import '../../css/Sorting.css';
 import Slider from '@material-ui/core/Slider';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';

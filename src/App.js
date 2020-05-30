@@ -1,5 +1,5 @@
 import React from 'react';
-import './index.css';
+import './css/index.css';
 import Navigation from "./components/Navigation";
 import SortingVisualizer from './components/Sorting/SortingVisualizer';
 import Pathfinding from './components/Pathfinding/Pathfinding';

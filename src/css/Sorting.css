@@ -1,0 +1,32 @@
+
+.visualizer
+{
+  background: #d6dae0;
+  height: 700px;
+  width: 100%;
+}
+
+.sortInput{
+  width: 500px;
+  display: flex;
+  align-content: center;
+  
+}
+
+.nSlider {
+  margin: 0px 20px;
+  display: inline-block;
+  width: 80%;
+}
+
+.dropdown{
+  padding: 0%;
+}
+
+.SortingWindow{  
+  display:grid;
+}
+
+.Step{
+  display: flex;
+}
