@@ -13,16 +13,34 @@
 .pathingWindow{
     width: 100%;
     justify-content: center;
+    padding: 10px;
+    display: flex;
 }
 
 .grid{
     width: 50%;  
-    display: grid;      
+    display: grid; 
+    justify-content: center;     
 }
 
 .row{
     display: flex;
 }
+
 .element{
     display: inline-block;
+    margin: 1px;
+    border: 1px dashed #33aa3b;
 }
+
+.element:hover{
+    border: 1px dashed #335555;
+    background-color: burlywood;
+}
+
+.element[status = "2"]{
+    border: 1px solid #222222;
+    background-color: gray;
+}
+
+

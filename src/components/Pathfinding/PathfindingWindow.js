@@ -27,6 +27,7 @@ export default class PathfindingWindow extends Component {
             this.state.elementArr.push(row);
         }
     }
+
     renderArr() {
         const arr = this.state.elementArr;
         let divs = [];
