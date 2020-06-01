@@ -6,7 +6,7 @@ export default class Navigation extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            sorting: true,
+            sorting: !window.location.href.includes("paths"),
         }
     }
 

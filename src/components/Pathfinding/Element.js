@@ -25,10 +25,12 @@ export default class Element extends Component {
             this.setState({
                 Status: StatusTypes.WALL,
             });
+            this.props.onChange();
         } else if (this.state.Status === StatusTypes.WALL) {
             this.setState({
                 Status: StatusTypes.DEFAULT,
             });
+            this.props.onChange();
         }
     }
 
@@ -38,6 +40,7 @@ export default class Element extends Component {
                 this.setState({
                     Status: StatusTypes.WALL,
                 });
+                this.props.onChange();
             }
         }
     }
@@ -47,6 +50,7 @@ export default class Element extends Component {
             this.setState({
                 Status: StatusTypes.WALL,
             });
+            this.props.onChange();
         }
     }
 
@@ -60,4 +64,5 @@ export default class Element extends Component {
 Element.propTypes = {
     status: PropTypes.number,
     size: PropTypes.number,
+    onChange: PropTypes.func,
 }
