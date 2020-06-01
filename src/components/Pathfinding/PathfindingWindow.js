@@ -3,6 +3,7 @@ import Element from './Element';
 import uuid from 'react-uuid';
 import { StatusTypes } from './Element';
 import PropTypes from 'prop-types';
+import Dijkstra from '../../Dijkstra';
 
 export default class PathfindingWindow extends Component {
     constructor(props) {
@@ -15,6 +16,10 @@ export default class PathfindingWindow extends Component {
     }
 
     Solve() {
+        const startIndex = [0, 0];
+        const endIndex = [this.state.elementArray[0].length, this.state.elementArray.length];
+        Dijkstra.Solve(this.state.elementArray, startIndex, endIndex);
+
 
     }
 
@@ -25,9 +30,9 @@ export default class PathfindingWindow extends Component {
     }
 
     createElementGrid() {
-        let windowWidth = window.innerWidth / 2;
-        const elementSize = 15;
-        let elementCount = Math.floor(windowWidth / elementSize);
+        let gridSize = Math.floor(window.innerWidth, window.innerHeight) / 1.5;
+        const elementSize = 25;
+        let elementCount = Math.floor(gridSize / elementSize);
         let divs = [];
         for (let i = 0; i < elementCount; i++) {
             let row = []
@@ -39,7 +44,7 @@ export default class PathfindingWindow extends Component {
                     status = StatusTypes.END;
                 }
 
-                row.push(<Element key={uuid()} status={status} size={elementSize} onChange={() => this.onElementChange} />)
+                row.push(<Element key={uuid()} status={status} size={elementSize} position={[i, j]} onChange={() => this.onElementChange} />)
             }
             divs.push(<div key={uuid()} className="row">{row}</div>)
 

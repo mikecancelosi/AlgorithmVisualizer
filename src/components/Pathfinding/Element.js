@@ -19,6 +19,7 @@ export default class Element extends Component {
         super(props);
         this.state = {
             Status: props.status,
+            distance: Int8Array.POSITIVE_INFINITY,
         }
     }
 
@@ -67,4 +68,5 @@ Element.propTypes = {
     status: PropTypes.string,
     size: PropTypes.number,
     onChange: PropTypes.func,
+    position: PropTypes.array.isRequired,
 }
