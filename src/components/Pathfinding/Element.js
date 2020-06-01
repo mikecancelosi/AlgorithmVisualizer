@@ -5,10 +5,12 @@ import uuid from 'react-uuid';
 import '../../css/Pathfinding.css';
 
 export const StatusTypes = {
-    DEFAULT: 1,
-    WALL: 2,
-    START: 3,
-    END: 4
+    DEFAULT: "Empty",
+    WALL: "Wall",
+    GUESS: "Guess",
+    SOLVE: "Solve",
+    START: "Start",
+    END: "End",
 }
 
 
@@ -62,7 +64,7 @@ export default class Element extends Component {
 }
 
 Element.propTypes = {
-    status: PropTypes.number,
+    status: PropTypes.string,
     size: PropTypes.number,
     onChange: PropTypes.func,
 }

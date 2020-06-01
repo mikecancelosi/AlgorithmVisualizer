@@ -5,6 +5,24 @@ import { StatusTypes } from './Element';
 import PropTypes from 'prop-types';
 
 export default class PathfindingWindow extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            elementArray: this.createElementGrid(),
+            solving: false,
+        }
+
+    }
+
+    Solve() {
+
+    }
+
+    onElementChange = (newState) => {
+        if (newState === StatusTypes.WALL || newState === StatusTypes.DEFAULT) {
+            this.Solve();
+        }
+    }
 
     createElementGrid() {
         let windowWidth = window.innerWidth / 2;
@@ -21,7 +39,7 @@ export default class PathfindingWindow extends Component {
                     status = StatusTypes.END;
                 }
 
-                row.push(<Element key={uuid()} status={status} size={elementSize} />)
+                row.push(<Element key={uuid()} status={status} size={elementSize} onChange={() => this.onElementChange} />)
             }
             divs.push(<div key={uuid()} className="row">{row}</div>)
 
@@ -32,7 +50,7 @@ export default class PathfindingWindow extends Component {
         return (
             <div className="pathingWindow">
                 <div className="grid">
-                    {this.createElementGrid()}
+                    {this.state.elementArray}
                 </div>
             </div>
         )
