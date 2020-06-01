@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
 import '../../css/Pathfinding.css';
 
-const StatusTypes = {
+export const StatusTypes = {
     DEFAULT: 1,
     WALL: 2,
     START: 3,
@@ -16,7 +16,7 @@ export default class Element extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            Status: StatusTypes.DEFAULT,
+            Status: props.status,
         }
     }
 
@@ -58,7 +58,6 @@ export default class Element extends Component {
 }
 
 Element.propTypes = {
-    position: PropTypes.array,
+    status: PropTypes.number,
     size: PropTypes.number,
-    onClick: PropTypes.func
 }

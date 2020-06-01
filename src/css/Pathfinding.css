@@ -38,9 +38,19 @@
     background-color: burlywood;
 }
 
+
+
 .element[status = "2"]{
     border: 1px solid #222222;
     background-color: gray;
+}
+.element[status = "3"]{
+    border: 1px solid yellow;
+    background-color: green;
+}
+.element[status = "4"]{
+    border: 1px solid yellow;
+    background-color: red;
 }
 
 
