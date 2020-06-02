@@ -45,6 +45,7 @@ export default class PathfindingHeader extends Component {
                         </Select>
                     </FormControl>
                 </div>
+
             </div>
         )
     }

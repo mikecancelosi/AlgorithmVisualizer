@@ -3,28 +3,26 @@ import Element from './Element';
 import uuid from 'react-uuid';
 import { StatusTypes } from './Element';
 import PropTypes from 'prop-types';
-import Dijkstra from '../../Dijkstra';
+import { Solve } from '../../Dijkstra';
 
 export default class PathfindingWindow extends Component {
     constructor(props) {
         super(props);
         this.state = {
             elementArray: this.createElementGrid(),
-            solving: false,
         }
-
     }
 
     Solve() {
+        console.log("solve!");
         const startIndex = [0, 0];
         const endIndex = [this.state.elementArray[0].length, this.state.elementArray.length];
-        Dijkstra.Solve(this.state.elementArray, startIndex, endIndex);
-
-
+        Solve(this.state.elementArray, startIndex, endIndex);
     }
 
     onElementChange = (newState) => {
         if (newState === StatusTypes.WALL || newState === StatusTypes.DEFAULT) {
+            console.log("changing");
             this.Solve();
         }
     }
@@ -44,9 +42,9 @@ export default class PathfindingWindow extends Component {
                     status = StatusTypes.END;
                 }
 
-                row.push(<Element key={uuid()} status={status} size={elementSize} position={[i, j]} onChange={() => this.onElementChange} />)
+                row.push(<Element key={uuid()} status={status} size={elementSize} position={[i, j]} onChange={(state) => this.onElementChange(state)} />)
             }
-            divs.push(<div key={uuid()} className="row">{row}</div>)
+            divs.push(<div id={i} key={uuid()} className="row">{row}</div>)
 
         }
         return divs;

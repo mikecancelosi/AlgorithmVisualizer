@@ -21,8 +21,7 @@ export default class Pathfinding extends Component {
         super(props);
         this.state = {
             Algorithm: Algorithms.DIJKSTRA,
-            Maze: Mazes.CUSTOM,
-
+            Maze: Mazes.CUSTOM
         }
     }
 
@@ -41,7 +40,10 @@ export default class Pathfinding extends Component {
     render() {
         return (
             <div>
-                <Header onAlgoChange={(e, value) => this.onAlgoChange(e, value)} onMazeChange={(e, value) => this.onMazeChange(e, value)} />
+                <Header
+                    onAlgoChange={(e, value) => this.onAlgoChange(e, value)}
+                    onMazeChange={(e, value) => this.onMazeChange(e, value)} />
+
                 <PathfindingWindow MazeType={this.state.Maze} AlgoType={this.state.Algorithm} />
             </div>
         )

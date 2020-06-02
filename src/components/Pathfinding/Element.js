@@ -19,8 +19,14 @@ export default class Element extends Component {
         super(props);
         this.state = {
             Status: props.status,
-            distance: Int8Array.POSITIVE_INFINITY,
+            Distance: Int8Array.Infinity
         }
+    }
+
+    setDistance = (d) => {
+        this.setState(
+            { Distance: d }
+        )
     }
 
     onClick() {
@@ -28,13 +34,14 @@ export default class Element extends Component {
             this.setState({
                 Status: StatusTypes.WALL,
             });
-            this.props.onChange();
+
         } else if (this.state.Status === StatusTypes.WALL) {
             this.setState({
                 Status: StatusTypes.DEFAULT,
             });
-            this.props.onChange();
         }
+        console.log("onchanging");
+        this.props.onChange(this.state.Status);
     }
 
     onOver(mouseState) {
@@ -43,7 +50,7 @@ export default class Element extends Component {
                 this.setState({
                     Status: StatusTypes.WALL,
                 });
-                this.props.onChange();
+                this.props.onChange(this.state.Status);
             }
         }
     }
@@ -53,13 +60,13 @@ export default class Element extends Component {
             this.setState({
                 Status: StatusTypes.WALL,
             });
-            this.props.onChange();
+            this.props.onChange(this.state.Status);
         }
     }
 
     render() {
         return (
-            <Box className="element" onDragOver={() => this.onDragOver()} onMouseEnter={(button) => this.onOver(button)} onClick={() => this.onClick()} status={this.state.Status} key={uuid()} width={this.props.size} height={this.props.size} />
+            <Box id={this.props.position[0] + " " + this.props.position[1]} className="element" onDragOver={() => this.onDragOver()} onMouseEnter={(button) => this.onOver(button)} onClick={() => this.onClick()} status={this.state.Status} key={uuid()} width={this.props.size} height={this.props.size} />
         )
     }
 }
@@ -69,4 +76,5 @@ Element.propTypes = {
     size: PropTypes.number,
     onChange: PropTypes.func,
     position: PropTypes.array.isRequired,
+    distance: PropTypes.number,
 }
