@@ -21,7 +21,7 @@ export default class Pathfinding extends Component {
         super(props);
         this.state = {
             Algorithm: Algorithms.DIJKSTRA,
-            Maze: Mazes.CUSTOM
+            Maze: Mazes.CUSTOM,
         }
     }
 

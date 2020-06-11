@@ -1,4 +1,4 @@
-import { StatusTypes } from './components/Pathfinding/Element';
+import { StatusTypes } from './components/Pathfinding/PathfindingWindow';
 
 
 export function Solve(elementArray, startIndex, endIndex) {
@@ -11,21 +11,20 @@ export function Solve(elementArray, startIndex, endIndex) {
         }
         unvisitedElements.push(row);
     }
-
     let currentNode = [startIndex[0], startIndex[1]];
     unvisitedElements[currentNode[0]][currentNode[1]] = 0;
     while (currentNode) {
-        let neighbors = FindNeighbors(currentNode.props.position, unvisitedElements);
+        let neighbors = FindNeighbors(currentNode.position, unvisitedElements);
         for (let i = 0; i < neighbors.length; i++) {
             const neighbor = neighbors[i];
             if (neighbor.state.Status === StatusTypes.WALL) {
-                unvisitedElements[neighbor.props.position[0]][neighbor.props.position[1]] = null;
-            } else if (neighbor.state.Distance > currentNode.state.Distance + 1) {
-                neighbor.setDistance(currentNode.state.Distance + 1);
+                unvisitedElements[neighbor.position[0]][neighbor.position[1]] = null;
+            } else if (neighbor.distance > currentNode.distance + 1) {
+                neighbor.distance = currentNode.distance + 1;
             }
         }
-        unvisitedElements[currentNode.props.position[0]].props.children[currentNode.props.position[1]] = null;
-        if (!unvisitedElements[endIndex[0]].props.children[endIndex[1]]) {
+        unvisitedElements[currentNode.position[0]][currentNode.position[1]] = null;
+        if (!unvisitedElements[endIndex[0]][endIndex[1]]) {
             let nodePath = GetSolvePath(elementArray, endIndex);
             return nodePath.reverse();
         } else {
@@ -65,7 +64,7 @@ function FindNeighbors(position, elements) {
 function FindSmallestDistanceNode(elements) {
     let node = elements[0];
     for (let element in elements) {
-        if (element.state.Distance < node.state.Distance) {
+        if (element.distance < node.distance) {
             node = element;
         }
     }
@@ -76,7 +75,7 @@ function GetSolvePath(elementArray, endIndex) {
     let nodePath = [];
     let node = elementArray[endIndex[0]][endIndex[1]];
     while (node) {
-        let neighbors = FindNeighbors(node.props.position);
+        let neighbors = FindNeighbors(node.position);
         let smallestNode = FindSmallestDistanceNode(neighbors);
         nodePath.push(smallestNode);
         node = smallestNode;

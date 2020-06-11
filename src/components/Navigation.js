@@ -15,8 +15,12 @@ export default class Navigation extends React.Component {
         return (
             <div id="navigation" style={navStyle}>
                 <div className="menu-list" >
-                    <Link className="menu-list-item" style={this.state.sorting ? linkStyleActive : linkStyle} onClick={() => this.setState({ sorting: true })} to="/"> Sorting </Link>
-                    <Link className="menu-list-item" style={this.state.sorting ? linkStyle : linkStyleActive} onClick={() => this.setState({ sorting: false })} to="/paths"> Pathfinding </Link>
+                    <div className="menu-list-item">
+                        <Link className="menu-link" style={this.state.sorting ? linkStyleActive : linkStyle} onClick={() => this.setState({ sorting: true })} to="/"> Sorting </Link>
+                    </div>
+                    <div className="menu-list-item">
+                        <Link className="menu-link" style={this.state.sorting ? linkStyle : linkStyleActive} onClick={() => this.setState({ sorting: false })} to="/paths"> Pathfinding </Link>
+                    </div>
                 </div >
             </div >
 
