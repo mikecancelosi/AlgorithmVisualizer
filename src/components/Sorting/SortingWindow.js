@@ -258,7 +258,7 @@ export class SortingWindow extends Component {
     RenderSteps(steps) {
         if (steps && document.getElementById('SortWindow')) {
             let cols = [];
-            let clHeight = window.innerHeight - document.getElementById('navigation').clientHeight - document.getElementById('SortingInput').clientHeight - 30;
+            let clHeight = window.innerHeight - document.getElementById('SortingInput').clientHeight - 30;
             let clWidth = document.getElementById('Visualizer').clientWidth;
             let size = Math.min((clHeight / steps.length), (clWidth / this.props.arr.length));
             for (let i = 0; i < steps.length; i++) {
