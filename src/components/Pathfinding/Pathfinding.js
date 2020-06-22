@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Header from './PathfindingHeader';
-import PathfindingWindow from './PathfindingWindow';
+import Grid from './Grid';
 
 
 export const Algorithms = {
@@ -44,7 +44,7 @@ export default class Pathfinding extends Component {
                     onAlgoChange={(e, value) => this.onAlgoChange(e, value)}
                     onMazeChange={(e, value) => this.onMazeChange(e, value)} />
 
-                <PathfindingWindow MazeType={this.state.Maze} AlgoType={this.state.Algorithm} />
+                <Grid MazeType={this.state.Maze} AlgoType={this.state.Algorithm} />
             </div>
         )
     }

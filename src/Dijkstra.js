@@ -1,8 +1,7 @@
-import { StatusTypes } from './components/Pathfinding/PathfindingWindow';
 
 
-export function Solve(elementArray, startIndex, endIndex) {
-    const arraySize = elementArray.length;
+export function Solve(arraySize, startIndex, endIndex) {
+
     let unvisitedElements = [];
     for (let i = 0; i < arraySize; i++) {
         let row = [];
@@ -17,7 +16,7 @@ export function Solve(elementArray, startIndex, endIndex) {
         let neighbors = FindNeighbors(currentNode.position, unvisitedElements);
         for (let i = 0; i < neighbors.length; i++) {
             const neighbor = neighbors[i];
-            if (neighbor.state.Status === StatusTypes.WALL) {
+            if (neighbor.state.status === "Wall") {
                 unvisitedElements[neighbor.position[0]][neighbor.position[1]] = null;
             } else if (neighbor.distance > currentNode.distance + 1) {
                 neighbor.distance = currentNode.distance + 1;
